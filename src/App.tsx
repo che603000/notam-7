@@ -15,7 +15,7 @@ function App() {
                     <PanelMap/>
                 </Col>
                 <Col sm={3}>
-                    <PanelAlts/>
+                    {/*<PanelAlts/>*/}
                 </Col>
             </Row>
 

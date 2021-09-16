@@ -1,5 +1,5 @@
 import {makeObservable, observable, computed, action} from 'mobx';
-import {decodeNotam, Model} from 'notam-xone-exp/src';
+//import {decodeNotam, Model} from 'notam-xone-exp/src';
 
 const notamText = `(Ь7023/21 НОТАМН
 Щ)УЛЛЛ/ЩРТЦА/ИЖ/БО/В/000/030/6041С02925В010
@@ -27,11 +27,11 @@ class Notam {
     text = "";
 
     get decode() {
-        return decodeNotam(this.text);
+        return null;// decodeNotam(this.text);
     }
 
     get model() {
-        return Model.parse(this.decode);
+        return null; //Model.parse(this.decode);
     }
 
     constructor(text) {

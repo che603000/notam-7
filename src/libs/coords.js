@@ -1,3 +1,5 @@
+import num from 'numeral';
+import L from "leaflet";
 // const validate = (value: string, length: number, min: number, max: number) => {
 //     const val = parseInt(value);
 //     return value.length === length && min <= val && val < max;
@@ -33,3 +35,26 @@ export const parseCoords = (str) => {
     }
 }
 
+export const normLatLng = latlng => {
+    const {lat, lng} = latlng
+    const nLat = +(((lat * 3600 + 0.5) | 0) / 3600).toFixed(4);
+    const nLng = +(((lng * 3600 + 0.5) | 0) / 3600).toFixed(4);
+    return L.latLng(nLat, nLng);
+}
+
+export const latLngToCoords = latlng => {
+    const {lat, lng} = latlng
+
+    const mLat = lat % 1 * 60;
+    const sLat = mLat % 1 * 60;
+
+    const mLng = lng % 1 * 60;
+    const sLng = mLng % 1 * 60;
+
+    return [lat, mLat, sLat]
+        .map(value => num(value).format('00'))
+        .join('') + (lat > 0 ? 'N' : 'S') +
+        [lng, mLng, sLng]
+        .map((value, index) => num(value).format(index===0 ?'000':'00'))
+        .join('') + (lat > 0 ? 'E' : 'W');
+}
