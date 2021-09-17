@@ -1,14 +1,14 @@
-import {PropsWithChildren} from "react";
-import {Form, Tabs, Tab, Alert, Row, Col, DropdownButton, Dropdown, InputGroup} from 'react-bootstrap';
-import model from '../store/geom-store';
+import {Form, Tabs, Tab, Alert, Row, Col} from 'react-bootstrap';
+import model from '../store/geometry-store';
 import {observer} from 'mobx-react';
+import Alts from './altitude';
 
 
-
-const View = (props: PropsWithChildren<any>) => {
-    //const {} = props;
-    const onChange = (e: any) => model.setCoords(e.target.value);
-    const setDescription = (e: any) => model.setDescription(e.target.value);
+const View = () => {
+    const onChange = (e: any) => {
+        model.setCoords(e.target.value);
+    }
+    const onSelf = () => model.createConvexPath();
 
     return (
         <div className="panel-props">
@@ -25,38 +25,28 @@ const View = (props: PropsWithChildren<any>) => {
                         <Form.Group className="mb-3" controlId="geom-coords">
                             <Form.Label>Координаты</Form.Label>
                             <Form.Control as="textarea"
+                                          readOnly
                                           size="sm"
                                           rows={2}
                                           value={model.coords}
                                           onChange={onChange}
-                                          isInvalid={!model.isValid}
+                                          isInvalid={!model.valid}
                                           placeholder="560000N0430000E-560500N0430500E-..."
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {model.isSelfIntersections() &&
+                                <span> Самопересечение <a href="#" onClick={onSelf}>исправить</a></span>}
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="geom-alts">
                             <Row>
                                 <Col>
                                     <Form.Label>Нижняя граница</Form.Label>
-                                    <InputGroup className="mb-3" size="sm">
-                                        <Form.Control type="number" max={9999} min={0} step={10}
-                                                      aria-label="Text input with dropdown button"/>
-
-                                        <DropdownButton
-                                            variant="outline-secondary"
-                                            title="МЕТРЫ"
-                                            id="input-group-dropdown-2"
-                                            align="end"
-                                        >
-                                            <Dropdown.Item href="#">Action</Dropdown.Item>
-                                            <Dropdown.Item href="#">Another action</Dropdown.Item>
-                                            <Dropdown.Item href="#">Something else here</Dropdown.Item>
-                                            <Dropdown.Divider/>
-                                            <Dropdown.Item href="#">Separated link</Dropdown.Item>
-                                        </DropdownButton>
-                                    </InputGroup> </Col>
+                                    <Alts id="minAlt" value={model.minAlt} setValue={model.setAlt}/>
+                                </Col>
                                 <Col>
                                     <Form.Label>Верхняя граница</Form.Label>
-                                    <Form.Control size="sm"/>
+                                    <Alts id="maxAlt" value={model.maxAlt} setValue={model.setAlt}/>
                                 </Col>
                             </Row>
 
@@ -64,12 +54,7 @@ const View = (props: PropsWithChildren<any>) => {
                     </Alert>
                 </Tab>
                 <Tab eventKey="Q" title="Q">
-                    <Form.Control as="textarea"
-                                  rows={5}
-                                  value={model.description}
-                                  onChange={setDescription}
-                                  style={{textTransform: 'uppercase'}}
-                    />
+
                 </Tab>
                 <Tab eventKey="G" title="GEOM" disabled>
                     2

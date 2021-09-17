@@ -1,13 +1,16 @@
-import {makeObservable, observable, computed, action} from 'mobx';
+import {makeObservable, observable, computed, action, autorun} from 'mobx';
 
 
-class GeomStore {
+class Geom {
 
     coords = "";
     description = ""
 
     get isValid() {
-        return this.coords.split('-').every(coords => /\d{6}[NE]\d{7}[EW]/.test(coords));
+        if (!this.coords)
+            return true;
+        return this.coords.split('-').every(coords => /\d{6}[NECСЮ]\d{7}[EWЕЗВ]/.test(coords))
+            || this.coords.split('-').every(coords => /\d{4}[NECСЮ]\d{5}[EWЕЗВ]/.test(coords));
     }
 
     constructor() {
@@ -37,6 +40,22 @@ class GeomStore {
                 if (!/\d{6}[NE]\d{7}[EW]/.test(coords))
                     invalidCoords.push(coords);
             });
+    }
+}
+
+class GeomStore {
+
+    textCoords = new Geom()
+    mapCoords = new Geom()
+
+    constructor() {
+        autorun(() => {
+            this.textCoords.setCoords(this.mapCoords.coords);
+        });
+        autorun(() => {
+            if (this.textCoords.isValid)
+                this.mapCoords.setCoords(this.textCoords.coords);
+        })
     }
 }
 

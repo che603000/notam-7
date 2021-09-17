@@ -1,6 +1,6 @@
 import React from 'react';
 import PanelProps from './components/panel-creator';
-import PanelAlts from './components/panel-alts';
+//import PanelAlts from './components/panel-alts';
 import PanelMap from './components/panel-map';
 import {Col, Container, Row} from "react-bootstrap";
 

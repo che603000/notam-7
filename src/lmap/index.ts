@@ -16,6 +16,7 @@ export default () => {
     }).addTo(myMap);
 
     area(myMap);
+    return myMap;
 }
 
 
