@@ -1,4 +1,11 @@
-import {Form, Tabs, Tab, Alert, Row, Col} from 'react-bootstrap';
+import {Form, Tabs, Tab, Alert, Row, Col, Button, Table} from 'react-bootstrap';
+import {
+    FaRegTrashAlt as IconRemove,
+    FaRegEdit as IconEdit,
+    FaRegSave as IconSave,
+    FaRegTimesCircle as IconClose,
+    FaPlus as IconAdd
+} from 'react-icons/fa';
 import model from '../store/geometry-store';
 import {observer} from 'mobx-react';
 import Alts from './altitude';
@@ -14,10 +21,14 @@ const View = () => {
         <div className="panel-props">
             <Tabs defaultActiveKey="F" id="uncontrolled-tab-example" className="mb-3">
                 <Tab eventKey="F" title="Area">
-                    <Alert variant="light" dismissible>
+                    <Alert variant="light">
+                        <div className="geometry-tools-clock">
+                            <button className="btn-tools"><IconSave/></button>
+                            <button className="btn-tools"><IconClose/></button>
+                        </div>
                         <Form.Group className="mb-3" controlId="geom-type">
                             <Form.Label>Тип геометрии</Form.Label>
-                            <Form.Select size="sm">
+                            <Form.Select>
                                 <option value="area">Полигон</option>
                                 <option value="circle">Круг</option>
                             </Form.Select>
@@ -26,7 +37,6 @@ const View = () => {
                             <Form.Label>Координаты</Form.Label>
                             <Form.Control as="textarea"
                                           readOnly
-                                          size="sm"
                                           rows={2}
                                           value={model.coords}
                                           onChange={onChange}
@@ -52,12 +62,56 @@ const View = () => {
 
                         </Form.Group>
                     </Alert>
+                    <Alert variant="success">
+
+                        <div className="geometry-tools-clock">
+                            <button className="btn-tools"><IconRemove/></button>
+                            <button className="btn-tools"><IconEdit/></button>
+                        </div>
+                        1. ПОЛОСА ШИРИНА=2KM 560000N0430000E-560000N0430000E-560000N0430000E...
+                    </Alert>
+                    <Alert variant="warning">
+                        <div className="geometry-tools-clock">
+                            <button className="btn-tools"><IconRemove/></button>
+                            <button className="btn-tools"><IconEdit/></button>
+                        </div>
+                        2. Круг R=2KM CENTER=560000N0430000E
+                    </Alert>
+                    {/*<Table borderless={true}>*/}
+                    {/*    <tbody>*/}
+                    {/*    <tr className="table-success align-middle">*/}
+                    {/*        <td>*/}
+                    {/*            <Button variant="outline-secondary" size="sm"><IconRemove/></Button>*/}
+                    {/*        </td>*/}
+                    {/*        <td>ПОЛОСА ШИРИНА=2KM 560000N0430000E-560000N0430000E-560000N0430000E...</td>*/}
+                    {/*        <td>*/}
+                    {/*            <Button variant="outline-secondary" size="sm"><IconEdit/></Button>*/}
+                    {/*        </td>*/}
+                    {/*    </tr>*/}
+                    {/*    <tr className="table-warning align-middle">*/}
+                    {/*        <td >*/}
+                    {/*            <Button variant="outline-secondary" size="sm"><IconRemove/></Button>*/}
+                    {/*        </td>*/}
+                    {/*        <td>Круг R=2KM CENTER=560000N0430000E</td>*/}
+                    {/*        <td>*/}
+                    {/*            <Button variant="outline-secondary" size="sm"><IconEdit/></Button>*/}
+                    {/*        </td>*/}
+                    {/*    </tr>*/}
+                    {/*    <tr>*/}
+                    {/*        <td></td>*/}
+                    {/*        <td></td>*/}
+                    {/*        <td>*/}
+                    {/*            <Button variant="outline-secondary" size="sm"><IconAdd/></Button>*/}
+                    {/*        </td>*/}
+                    {/*    </tr>*/}
+                    {/*    </tbody>*/}
+                    {/*</Table>*/}
                 </Tab>
                 <Tab eventKey="Q" title="Q">
 
                 </Tab>
                 <Tab eventKey="G" title="GEOM" disabled>
-                    2
+
                 </Tab>
             </Tabs>
         </div>

@@ -25,7 +25,7 @@ const Alts = (props: any) => {
     }
 
     return (
-        <InputGroup className="mb-3" size="sm">
+        <InputGroup className="mb-3">
             <Form.Control type="number"
                           value={altValue?.value}
                           onChange={onValue}
