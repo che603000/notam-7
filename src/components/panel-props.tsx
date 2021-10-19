@@ -7,7 +7,7 @@ import {observer} from 'mobx-react';
 
 const View = (props: PropsWithChildren<any>) => {
     //const {} = props;
-    const onChange = (e: any) => model.setText(e.target.value);
+/*    const onChange = (e: any) => model.setText(e.target.value);
     const setDescription = (e: any) => model.setDescription(e.target.value);
 
     return (
@@ -39,7 +39,8 @@ const View = (props: PropsWithChildren<any>) => {
                 </Tab>
             </Tabs>
         </div>
-    )
+    )*/
+    return null;
 }
 
 export default observer(View);

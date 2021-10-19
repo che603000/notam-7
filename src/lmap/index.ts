@@ -1,6 +1,7 @@
 import L from 'leaflet';
 //import notam from "./notam";
 import area from "./area";
+import source from "./source";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
@@ -16,6 +17,7 @@ export default () => {
     }).addTo(myMap);
 
     area(myMap);
+    source(myMap);
     return myMap;
 }
 

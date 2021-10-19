@@ -77,35 +77,6 @@ const View = () => {
                         </div>
                         2. Круг R=2KM CENTER=560000N0430000E
                     </Alert>
-                    {/*<Table borderless={true}>*/}
-                    {/*    <tbody>*/}
-                    {/*    <tr className="table-success align-middle">*/}
-                    {/*        <td>*/}
-                    {/*            <Button variant="outline-secondary" size="sm"><IconRemove/></Button>*/}
-                    {/*        </td>*/}
-                    {/*        <td>ПОЛОСА ШИРИНА=2KM 560000N0430000E-560000N0430000E-560000N0430000E...</td>*/}
-                    {/*        <td>*/}
-                    {/*            <Button variant="outline-secondary" size="sm"><IconEdit/></Button>*/}
-                    {/*        </td>*/}
-                    {/*    </tr>*/}
-                    {/*    <tr className="table-warning align-middle">*/}
-                    {/*        <td >*/}
-                    {/*            <Button variant="outline-secondary" size="sm"><IconRemove/></Button>*/}
-                    {/*        </td>*/}
-                    {/*        <td>Круг R=2KM CENTER=560000N0430000E</td>*/}
-                    {/*        <td>*/}
-                    {/*            <Button variant="outline-secondary" size="sm"><IconEdit/></Button>*/}
-                    {/*        </td>*/}
-                    {/*    </tr>*/}
-                    {/*    <tr>*/}
-                    {/*        <td></td>*/}
-                    {/*        <td></td>*/}
-                    {/*        <td>*/}
-                    {/*            <Button variant="outline-secondary" size="sm"><IconAdd/></Button>*/}
-                    {/*        </td>*/}
-                    {/*    </tr>*/}
-                    {/*    </tbody>*/}
-                    {/*</Table>*/}
                 </Tab>
                 <Tab eventKey="Q" title="Q">
 
