@@ -1,5 +1,5 @@
 import {makeObservable, observable, action} from 'mobx';
-import {decode, Notam, Decode} from 'notam-lib/dist/index';
+//import {decode, Notam, Decode} from 'notam-lib/dist/index';
 
 const notamText = `(Ь8409/21 НОТАМН
 Щ)УЛЛЛ/ЩРТЦА/ИЖ/БО/В/000/050/5850С03241В030
@@ -17,16 +17,16 @@ const notamText = `(Ь8409/21 НОТАМН
 
 class AppStore {
 
-    decode?: Decode.IDecode = undefined;
-    notam?: Notam = undefined;
+    // decode?: Decode.IDecode = undefined;
+    // notam?: Notam = undefined;
     text: string = notamText;
 
 
     constructor() {
         makeObservable(this, {
             text: observable,
-            decode: observable.ref,
-            notam: observable.ref,
+            //decode: observable.ref,
+            //notam: observable.ref,
 
             setText: action,
             setDecode: action,
@@ -35,13 +35,13 @@ class AppStore {
 
     setText(value: string) {
         this.text = value;
-        this.decode = undefined;
-        this.notam = undefined;
+        //this.decode = undefined;
+        //this.notam = undefined;
     }
 
     setDecode() {
-        this.decode = decode(this.text);
-        this.notam = Notam.parse(this.decode);
+        // this.decode = decode(this.text);
+        // this.notam = Notam.parse(this.decode);
     }
 }
 
