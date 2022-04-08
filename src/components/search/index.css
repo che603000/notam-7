@@ -1,0 +1,25 @@
+.app-search-panel {
+  border: 1px solid #EEEEEE;
+  padding: 0.5rem;
+}
+
+.app-search-filter-panel {
+  background-color: #EEE;
+  margin: 0.5rem;
+  min-height: 2rem;
+}
+.app-search-items-panel {
+  background-color: #EEE;
+  margin: 0.5rem;
+  min-height: 2rem;
+}
+
+.app-search-item-panel {
+  /*display: inline-block;*/
+  /*width: 40rem;*/
+  /*height: 20rem;*/
+  background-color: #FFF;
+  padding:  0.5rem;
+  margin-top: 0.3rem;
+  /*overflow: auto;*/
+}

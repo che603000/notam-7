@@ -1,0 +1,15 @@
+.app-move-icon {
+    /*text-align: center;*/
+    /*font-size: 14px;*/
+    /*font-weight: bold;*/
+    /*vertical-align: middle;*/
+    /*line-height: 20px;*/
+    /*border: 2px solid gray;*/
+    /*background-color: #FFF;*/
+    /*border-radius: 50%;*/
+    cursor: move;
+}
+
+.app-size-icon {
+    cursor: ns-resize;
+}

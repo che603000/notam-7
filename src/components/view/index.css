@@ -1,0 +1,48 @@
+
+.app-panel-notam {
+    padding: 0.5rem;
+}
+
+.app-panel {
+    border: 1px solid #EEE;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.app-panel-editable {
+    border-color: rgb(158, 193, 242);
+    border-width: 4px;
+}
+
+.app-panel-title {
+    padding: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    background-color: #EEEEEE;
+}
+
+.app-panel-title-toolbar {
+    box-sizing: content-box;
+    margin-top: -0.2rem;
+
+    /*opacity: 0.5;*/
+    float: right;
+}
+
+.app-panel-title-toolbar button svg {
+    /*opacity: 1;*/
+    color: #333;
+}
+
+.app-panel-content {
+    padding: 0.5rem;
+}
+
+.app-text-notam {
+    margin-bottom: 1rem;
+}
+
+.app-strong-text {
+    font-weight: 500;
+    /*font-family: Arial;*/
+}

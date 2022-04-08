@@ -1,0 +1,141 @@
+import {parserNotam, createModel} from "./notam-parser";
+import {parserTextNotam} from "./utils/geometry";
+import {circle as createCircle, point as createPoint, truncate} from "@turf/turf";
+import {IActiveTime, IModelNotam, IRegime, IMessage} from "./interface";
+import {hashCode} from "./utils/hash-code";
+
+
+export const createNotam = (text: string) => {
+    const item = parserNotam(text);
+    return createModel(item);
+}
+
+export class Notams {
+    models: IModelNotam[];
+
+    constructor(items: string[]) {
+        const nowDate = new Date();
+
+        this.models = items.map(item => createNotam(item))
+            .filter(item => {
+                const [, e] = item.schedule.rangeDate;
+                return nowDate <= e;
+            });
+    }
+
+    /**
+     "RA": "резервирование воздушного пространства (указать)",
+     "RD": "опасная зона (указать национальный индекс и номер)",
+     "RP": "запретная зона (указать национальный индекс и номер)",
+     "RR": "зона ограничения полетов (указать национальный индекс и номер)",
+     * @param type
+     * @param subjects
+     */
+    createActiveTime = (type: string, subjects: string[]): IActiveTime => {
+        return this.models
+            .filter((item: IModelNotam) => subjects.some(s => s === item.props.subject))
+            .map(model => {
+                const {index, schedule} = model;
+                return {index, schedule};
+            })
+            .reduce((res, item) => {
+                if (item.index)
+                    res[item.index] = item.schedule;
+                return res;
+            }, {} as IActiveTime);
+    }
+    /**
+     "RT": "зона временного ограничения полетов (указать зону)",
+     "WB": "выполнение фигур высшего пилотажа",
+     "WD": "подрыв взрывчатых веществ",
+     "WP": "Тренировочные парашютные прыжки, парапланеризм или дельтапланеризм",
+     "WE": "учения (указать)",
+     "WM": "пуски ракет, стрельба из пушек или стредьба ракетами",
+     * @param type
+     * @param subjects
+     */
+    createRegime = (type: string, subjects: string[]): IRegime[] => {
+        return this.models
+            .filter((model: IModelNotam) => subjects.some(s => s === model.props.subject))
+            .map(model => {
+                try {
+                    model.items = parserTextNotam(model.notam.E);
+                    if (model.items.length === 0) {
+                        throw new Error(`Invalid parsing geometry. source =${model.notam.E}`);
+                    }
+                    model.isValid = true;
+                } catch (e: any) {
+                    console.log(e.message, '\n', model.text);
+                    const pol = createCircle(model.props.center, model.props.radius / 1000);
+                    model.items = [pol && truncate(pol, {precision: 4, coordinates: 2})];
+                    model.isValid = false;
+                }
+                return model;
+            })
+            .reduce((res: any[], model) => {
+                model.items.forEach((item, index) => {
+                    const {id, items, ...data} = model;
+                    const m = {
+                        ...data,
+                        geometry: item.geometry,
+                        id,
+                        cid: `${model.id.replace("/", "_")}_${index}`
+                    }
+
+                    const {alts} = item.properties || {};
+
+                    if (alts) //  ставим высоту для фигуры если есть
+                        m.alts = alts;
+
+                    if (!m.alts) //  ставим высоту из поля Q если нет высоты
+                        m.alts = model.props.alts;
+
+                    res.push(m);
+                })
+                return res;
+            }, [])
+            .map(model => {
+                const {id, cid, regime, schedule, alts, text, isValid, geometry} = model;
+                return {
+                    id: cid,
+                    type,
+                    name: id,
+                    index: regime,
+                    activeSchedule: schedule,
+                    alts: alts,
+                    active: false,
+
+                    schedule: schedule.str,
+                    comment: text,
+                    isValid,
+
+                    geometry,
+                    checksum: hashCode({text})
+
+                } as IRegime;
+            })
+    }
+    createMessage = (type: string): IMessage[] => {
+        return this.models
+            .map(model => {
+                const {id, regime, index, schedule, alts, text, props} = model;
+                return {
+                    id,
+                    type,
+                    name: id,
+                    index: regime || index,
+                    activeSchedule: schedule,
+                    alts: alts,
+                    active: false,
+                    isValid: true,
+                    radius: props.radius,
+                    description: text,
+                    geometry: createPoint(props.center).geometry,
+                    checksum: hashCode({text})
+
+                } as IMessage;
+            })
+    }
+}
+
+

@@ -1,0 +1,57 @@
+import L from 'leaflet';
+import {ModelGeom} from './base';
+import {computed, makeObservable, observable} from 'mobx';
+import {LExt} from '../../utils/leaflet-ext';
+import {inspect} from "util";
+
+export interface ICircle {
+    center: string
+    radius: number
+}
+
+export class ModelCircle extends ModelGeom {
+    center: string = '';
+    radius: number = 0;
+
+    constructor(data: ICircle) {
+        super();
+        const {center, radius} = data;
+        this.center = center;
+        this.radius = radius;
+
+        makeObservable(this, {
+            center: observable,
+            radius: observable,
+            validate: computed,
+        });
+    }
+
+    static create() {
+        return new ModelCircle({center: '5600С04300В', radius: 1});
+    }
+
+    get validate() {
+        const center = this.center.toUpperCase().trim();
+        const err = new Map<string, string>();
+        if (!/^\d{4,6}[NSСЮ]\d{5,7}[WEЗВ]$/.test(center))
+            err.set('center', 'Неверно введена координата');
+        if (!(0 < this.radius && this.radius < 999))
+            err.set('radius', 'Неверный радиус');
+        return err;
+    }
+
+    get title() {
+        return 'Окружность'
+    }
+
+    toText() {
+        return `ОКРУЖНОСТЬ РАДИУС ${this.radius}КМ ЦЕНТР ${this.center} ПОВЕРХНОСТЬ-1500М СР.УР.МОРЯ.`
+    }
+
+    toJSON() {
+        const {center, radius} = this;
+        return {center, radius} as ICircle;
+    }
+}
+
+
