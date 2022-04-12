@@ -29,6 +29,6 @@ export const getKeysGroup = (group: any) => {
 
 
 options.forEach(item => {
-    const {model, component, title, group} = item;
-    setMetaData(model, {component, title}, group);
+    const {key, data, group} = item;
+    setMetaData(key, data, group);
 })

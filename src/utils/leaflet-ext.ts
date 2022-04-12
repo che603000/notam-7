@@ -46,10 +46,10 @@ export namespace LExt {
 
         }
 
-        middleTo(latlng: L.LatLng) {
-            const lat = (this.lat - latlng.lat) / 2;
-            const lng = (this.lng - latlng.lng) / 2;
-            return new LExt.LatLng(lat, lng)
+        middleTo(latlng: LatLng) {
+            const lat = (this.lat + latlng.lat) / 2;
+            const lng = (this.lng + latlng.lng) / 2;
+            return new LatLng(lat, lng)
         }
 
         destinationTo(heading: number, distance: number) {

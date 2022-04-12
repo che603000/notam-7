@@ -1,63 +1,60 @@
+import './index.css';
 import L from 'leaflet';
 import modelNotam from '../store/model-notam';
 import {autorun} from "mobx";
-import {circleMap} from './circle';
-import {stripMap} from './line';
+import * as DI from '../container-di'
 
 
 class MapNotam extends L.LayerGroup {
 
     layers = {}
-    options = {
-        color: '#660',
-        fill: true,
-        fillColor: '#990',
-        fillOpacity: 0.1
-    }
-
+    disposers = []
 
     onAdd(map) {
-        this.dispose = autorun((r) => this.onRender(modelNotam));
-        return this;
+        this.disposers.push(autorun((r) => this.onRender(modelNotam)));
+        this.disposers.push(autorun((r) => this.onEdit(modelNotam)));
+        return super.onAdd(map);
     }
 
     onRemove(map) {
-        this.dispose();
-        return this;
+        this.disposers.forEach(disposer => disposer());
+        return super.onRemove(map);
     }
 
     onRender(notam) {
-        //this.clearLayers();
         if (!notam)
             return;
 
-        const {items, editableId} = notam;
+        const {geometries} = notam;
 
-        // remove layer для которых нет item
-        this.getLayerKeys().forEach(cid => {
-            if (items.some(item => item.cid === cid))
+        // remove layer для которых нет model
+        this.getLayerItems().forEach(layer => {
+            if (geometries.items.some(model => model.cid === layer.cid))
                 return;
-            this.removeLayerItem(cid);
+            this.removeLayerItem(layer);
         })
-        //update
-        items.forEach(item => {
-            const layer = this.getLayerItem(item);
-            if (!layer)
+
+        // add layer для которых нет model
+        geometries.items.forEach(model => {
+            if (this.hasLayerItem(model))
                 return;
-            layer.setItem(item);
-            layer.setEdit(editableId === item.cid);
-        });
-        // add layer
-        items.forEach(item => {
-            if (this.hasLayerItem(item))
-                return;
-            const layer = this.createLayer(item);
+            const layer = this.createLayer(model);
             this.addLayerItem(layer);
-            layer.setEdit(editableId === item.cid);
         });
 
-        if (!editableId)
-            this.fitBounds();
+        this.fitBounds();
+    }
+
+    onEdit(notam) {
+        if (!notam)
+            return;
+
+        const {editableId} = notam;
+
+        this.getLayerItems().forEach(layer => {
+            const isEdit = layer.cid === editableId;
+            layer.setEdit(isEdit);
+        })
     }
 
     fitBounds() {
@@ -76,62 +73,32 @@ class MapNotam extends L.LayerGroup {
     }
 
     createLayer(item) {
-        if (item.type === 'ModelCircle') {
-            const layer = this.createCircle(item);
-            layer.on('edit', (e) => {
-                console.log(e);
-                if (modelNotam.editableId === e.cid) {
-                    const item = layer.options.item;
-                    modelNotam.setItem(item)
-                } else {
+        const {layer: Layer} = DI.getMetaData(item.type);
+        if (!Layer)
+            throw new Error(`Not found Layer for key =${item.type.name}`)
 
-                    modelNotam.setEdit(e.cid);
-                }
-            })
-            return layer;
-        }
-        if (item.type === 'ModelLine') {
-            return this.createLine(item);
-        }
-    }
-
-    createLine(item) {
-        const {cid, path, width} = item;
-        return stripMap(path, width * 1000, {
-            item,
-            cid
-        })
-    }
-
-    createCircle(item) {
-        const {cid, center, radius} = item;
-        return circleMap(center, radius * 1000, {
-            item,
-            cid
-        })
+        const layer = Layer.create(item);
+        layer.on('edit', (e) => {
+            const cid = modelNotam.editableId === e.cid ? '' : e.cid;
+            modelNotam.setEdit(cid);
+        });
+        return layer;
     }
 
     addLayerItem(layer) {
-        const cid = layer.options.cid;
-        this.layers[cid] = layer;
+        this.layers[layer.cid] = layer;
         this.addLayer(layer)
     }
 
-    removeLayerItem(layer) {
-        if (typeof layer === 'string') {
-            const cid = layer;
-            this.removeLayer(this.layers[cid]);
-            delete this.layers[cid];
-        } else {
-            this.removeLayer(layer);
-            delete this.layers[layer.options.cid];
-
-        }
-
+    removeLayerItem(layerOrCid) {
+        const layer = typeof layerOrCid === 'string' ? this.layers[layerOrCid] : layerOrCid;
+        layer.off();
+        delete this.layers[layer.cid];
+        this.removeLayer(layer);
     }
 
-    getLayerItem(item) {
-        const cid = typeof item === 'string' ? item : item.cid;
+    getLayerItem(model) {
+        const cid = typeof model === 'string' ? model : model.cid;
         return this.layers[cid];
     }
 
@@ -139,8 +106,8 @@ class MapNotam extends L.LayerGroup {
         return Object.values(this.layers);
     }
 
-    hasLayerItem(item) {
-        const cid = typeof item === 'string' ? item : item.cid;
+    hasLayerItem(model) {
+        const cid = typeof model === 'string' ? model : model.cid;
         return cid in this.layers;
     }
 

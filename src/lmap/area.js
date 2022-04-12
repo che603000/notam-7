@@ -17,7 +17,7 @@ class Area extends L.LayerGroup {
 
 
     onAdd(map) {
-        this.dispose = autorun(() => this.onRender(model.notam));
+        this.disposer = autorun(() => this.onRender(model.notam));
         //this.disposeValid = autorun(() => this.onValid(model.valid));
         return this;
     }

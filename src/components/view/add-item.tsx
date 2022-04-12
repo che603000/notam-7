@@ -1,12 +1,11 @@
 import {DropdownButton, Dropdown, Button} from 'react-bootstrap';
 import notam from '../../store/model-notam';
-//import {getMetaKeys, getMetaModel, TMetaCompGeom} from "./meta";
 import * as DI from '../../container-di';
-import {TMetaCompGeom} from "./items/types";
+import {GROUP_LIST_GEOMETRY, TMetaGeometry} from "../../container-di/config";
 
 export const AddItem = () => {
     const {geometries: {addItem}, setEdit} = notam;
-    const metaKeys = DI.getKeysGroup('TMetaCompGeom');
+    const metaKeys = DI.getKeysGroup(GROUP_LIST_GEOMETRY);
     const onAdd = (index: string | null) => {
         if(!index)
             return;
@@ -16,7 +15,7 @@ export const AddItem = () => {
         setEdit(model.cid);
     }
     const dropDowns = metaKeys
-        .map(key => DI.getMetaData<TMetaCompGeom>(key))
+        .map(key => DI.getMetaData<TMetaGeometry>(key))
         .map((meta, index) => {
             const {title} = meta;
             return <Dropdown.Item key={title} eventKey={`${index}`}>{title}</Dropdown.Item>

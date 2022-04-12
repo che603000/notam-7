@@ -1,11 +1,6 @@
 import {Row, Col} from "react-bootstrap"
 import PanelMap from "../panel-map"
 import {PanelNotam} from "./panel-notam";
-import * as DI from '../../container-di';
-import {ModelCircle} from "../../models/geoms/circle";
-import {ModelLine} from "../../models/geoms/line";
-
-
 
 export const ViewNotam = () => {
     return (
@@ -14,7 +9,7 @@ export const ViewNotam = () => {
                 <PanelNotam/>
             </Col>
             <Col sm={7}>
-                {/*<PanelMap/>*/}
+                <PanelMap/>
             </Col>
         </Row>
     )

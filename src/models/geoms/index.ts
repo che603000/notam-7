@@ -1,11 +1,13 @@
 import {IGeom} from "./base";
 import {action, makeObservable, observable, observe} from "mobx";
 import {ModelCircle} from "./circle";
+import {ModelLine} from "./line";
 
 export class Geometries {
 
     items = observable.array<IGeom>([
-        new ModelCircle({center: '5600С04300В', radius: 2})
+        //new ModelCircle({center: '5600С04300В', radius: 2})
+        ModelLine.create()
     ], {deep: false})
 
     constructor() {

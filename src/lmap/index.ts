@@ -1,7 +1,7 @@
 import L from 'leaflet';
-//import notam from "./notam";
-import area from "./area";
-import source from "./source";
+import notam from "./notam";
+//import area from "./area";
+//import source from "./source";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
@@ -16,8 +16,8 @@ export default () => {
         zoomOffset: -1
     }).addTo(myMap);
 
-    area(myMap);
-    source(myMap);
+    notam(myMap);
+    //source(myMap);
     return myMap;
 }
 

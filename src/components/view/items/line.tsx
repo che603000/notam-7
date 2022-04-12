@@ -6,6 +6,7 @@ import {PathInput} from '../inputs/input-path';
 import {Edit, View, TCompGeom} from './toolbar';
 import {LengthInput} from "../inputs/input-length";
 
+
 export const LineView = (props: TCompGeom<ModelLine>) => {
     const {path, width} = props.item;
     return (
@@ -62,6 +63,11 @@ export const LineEdit = (props:  TCompGeom<ModelLine>) => {
     )
 }
 
+export const ComponentLine = (props: TCompGeom<ModelLine>) => {
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default [LineView, LineEdit];
+    const {item, onEdit, onRemove, editableId} = props;
+    if (item.cid === editableId)
+        return <LineEdit key={item.cid} onEdit={onEdit} onRemove={onRemove} item={item}/>
+    else
+        return <LineView key={item.cid} onEdit={onEdit} onRemove={onRemove} item={item} editableId={editableId}/>
+}

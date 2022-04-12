@@ -18,7 +18,7 @@ class Area extends L.LayerGroup {
 
 
     onAdd(map) {
-        this.dispose = autorun(() => this.onRender(model.decode));
+        this.disposer = autorun(() => this.onRender(model.decode));
         return this;
     }
 

@@ -3,8 +3,6 @@ import {ModelCircle} from '../../../models/geoms/circle';
 import {CoordsInput} from '../inputs/input-coords';
 import {LengthInput} from '../inputs/input-length';
 import {Edit, View, TCompGeom} from './toolbar';
-import * as DI from "../../../container-di";
-import {TMetaCompGeom} from "./types";
 
 
 export const CircleView = (props: TCompGeom<ModelCircle>) => {
@@ -59,7 +57,7 @@ const CircleForm = (props: { item: ModelCircle }) => {
     )
 }
 
-export const Circle = (props: TCompGeom<ModelCircle>) => {
+export const ComponentCircle = (props: TCompGeom<ModelCircle>) => {
 
     const {item, onEdit, onRemove, editableId} = props;
     if (item.cid === editableId)
@@ -68,10 +66,5 @@ export const Circle = (props: TCompGeom<ModelCircle>) => {
         return <CircleView key={item.cid} onEdit={onEdit} onRemove={onRemove} item={item} editableId={editableId}/>
 }
 
-export default {
-    title: 'Окружность',
-    model: ModelCircle,
-    component: Circle
-} as TMetaCompGeom;
 
 

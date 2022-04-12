@@ -1,7 +1,8 @@
 import L from 'leaflet';
 import {parsePath, positionToCoords} from "../libs/notam/utils/coords-parser";
-import {ILine} from "../models/geoms/line";
-import {ICircle} from "../models/geoms/circle";
+import {ILine, ModelLine} from "../models/geoms/line";
+import {ICircle, ModelCircle} from "../models/geoms/circle";
+import {LExt} from "../utils/leaflet-ext";
 
 //import util from 'leaflet-geometryutil';
 
@@ -120,11 +121,10 @@ export class StripMap extends L.LayerGroup {
         opacity: 0.3,
     }
 
-    constructor(path: string, private width: number, private options: any) {
+    constructor(path: LExt.LatLng[], private width: number, private options: any) {
         super([]);
-        const points = this.coordsToPath(path);
-        this.line = new Line(points, {});
-        this.strip = L.polyline(points, {...this.lineBoundsOptions, ...options});
+        this.line = new Line(path, {});
+        this.strip = L.polyline(path, {...this.lineBoundsOptions, ...options});
     }
 
     onAdd(map: L.Map) {
@@ -160,7 +160,15 @@ export class StripMap extends L.LayerGroup {
 
     }
 
+    static create(model: ModelLine) {
+        const {path, width} = model;
+        const latlngs = path.split('-').map(coords => LExt.LatLng.parseCoords(coords));
+        return new StripMap(latlngs, width * 1000, {
+            model
+        });
+    }
+
 
 }
 
-export const stripMap = (coords: string, center: number, options: any) => new StripMap(coords, center, options);
+//export const stripMap = (coords: string, center: number, options: any) => new StripMap(coords, center, options);

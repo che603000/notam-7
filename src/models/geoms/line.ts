@@ -10,6 +10,10 @@ export class ModelLine extends ModelGeom {
     path: string = ''
     width: number = 0;
 
+    get title(){
+        return 'Полоса';
+    }
+
     get validate() {
         const err = new Map<string, string>();
         const val = this.path
@@ -27,6 +31,7 @@ export class ModelLine extends ModelGeom {
         const {path, width} = data;
         this.path = path;
         this.width = width;
+
         makeObservable(this, {
             path: observable,
             width: observable,
@@ -34,10 +39,8 @@ export class ModelLine extends ModelGeom {
         });
     }
 
-    clone(data?: ILine) {
-        const model = new ModelLine(data || this.toJSON());
-        model.cid = this.cid;
-        return model;
+    static create() {
+        return new ModelLine({path: '5600С04300В-5600С04320В', width: 1});
     }
 
     toText() {
